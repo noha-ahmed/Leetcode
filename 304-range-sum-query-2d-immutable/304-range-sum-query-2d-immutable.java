@@ -6,8 +6,15 @@ class NumMatrix {
         int m = matrix[0].length;
         prefixSum = new int[n+1][m+1];
         
-        for(int col = m - 1; col >= 0; col--)
-            for(int row = n - 1; row >= 0; row--)
+        prefixSum[n-1][m-1] = matrix[n-1][m-1];
+        for(int row = n - 2; row >= 0; row--)
+                prefixSum[row][m-1] = matrix[row][m-1] + prefixSum[row + 1][m-1];
+        
+        for(int col = m - 2; col >= 0; col--)
+                prefixSum[n - 1][col] = matrix[n - 1][col] + prefixSum[n - 1][col + 1];
+        
+        for(int col = m - 2; col >= 0; col--)
+            for(int row = n - 2; row >= 0; row--)
                 prefixSum[row][col] = matrix[row][col] + prefixSum[row][col+1]
                     + prefixSum[row+1][col] - prefixSum[row+1][col+1];
                
