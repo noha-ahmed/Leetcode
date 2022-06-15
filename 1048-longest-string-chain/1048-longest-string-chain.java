@@ -6,19 +6,17 @@ class Solution {
         map.put(words[0], 1);
         for(int i = 1; i < words.length; i++){
             String word = words[i];
+            StringBuilder strBuilder = new StringBuilder(word);
             int length = 1;
             for(int j = 0; j < word.length(); j++){
-                length = Math.max(length, map.getOrDefault(removeCharAt(word, j), 0) + 1);
+                strBuilder.deleteCharAt(j);
+                length = Math.max(length, map.getOrDefault(strBuilder.toString(), 0) + 1);
+                strBuilder.insert(j, word.charAt(j));
             }
             map.put(word, length);
             maxLength = Math.max(length, maxLength);
             
         }
         return maxLength;
-    }
-    
-     public String removeCharAt(String str, int index) {
-        return str.substring(0,index) + str.substring(index + 1, str.length());
-
     }
 }
