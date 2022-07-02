@@ -10,9 +10,11 @@ class Solution {
     
     public int getMaxDistance(int[] cuts, int n){
         Arrays.sort(cuts);
-        int maxD = cuts[0];
-        for(int i = 1; i < cuts.length; i++){
-            maxD = Math.max(maxD, cuts[i] - cuts[i - 1]);
+        int maxD = 0;
+        int prev = 0;
+        for(int cut : cuts){
+            maxD = Math.max(maxD, cut - prev);
+            prev = cut;
         }
         maxD = Math.max(maxD, n - cuts[cuts.length - 1]);
         return maxD;
