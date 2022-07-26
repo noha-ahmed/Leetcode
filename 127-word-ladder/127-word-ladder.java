@@ -1,43 +1,46 @@
 class Solution {
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+        if (!wordList.contains(endWord))
+            return 0;
+
         wordList.add(beginWord);
+        final int N = wordList.size();
         
-        int[] distances = new int[wordList.size()];
+        int distance[] = new int[N];
         
-        return shortestDistance(wordList, distances, endWord);
+        bfs(N - 1, wordList, distance);
+
+        for (int i = 0; i < N; i++)
+            if (wordList.get(i).equals(endWord) && distance[i] != Integer.MAX_VALUE)
+                return distance[i] + 1;
+
+        return 0;
     }
-    
-    private int shortestDistance(List<String> wordList, int[] distances, String endWord){
+    private void bfs(int startNode, List<String> words, int distance[]) {
         final int INF = Integer.MAX_VALUE;
-        Arrays.fill(distances, INF);
+        Arrays.fill(distance, INF);
+
         Queue<Integer> queue = new LinkedList<>();
-        
-        queue.add(wordList.size() - 1);
-        distances[wordList.size() - 1] = 1;
-        
-        while( !queue.isEmpty() ){
+        distance[startNode] = 0;
+        queue.add(startNode);
+
+        while (!queue.isEmpty()) {
             int node = queue.poll();
-            String currentWord = wordList.get(node);
-            for(int i = 0; i < wordList.size() - 1; i++){
-                String neighborWord = wordList.get(i);
-                if( distances[i] == INF && oneTransformationAway(neighborWord, currentWord)){
-                    distances[i] = distances[node] + 1;
-                    if( neighborWord.equals(endWord) )
-                        return distances[i];
-                    queue.add(i);
+            
+            for (int neighbour = 0; neighbour < words.size(); neighbour++)
+                if (distance[neighbour] == INF && oneTransformationAway(words.get(node), words.get(neighbour))) {
+                    distance[neighbour] = distance[node] + 1;
+                    queue.add(neighbour);
                 }
-            }
         }
-          return 0;
     }
-    
-    private boolean oneTransformationAway(String word1, String word2){
+    private boolean oneTransformationAway(String source, String destination) {
+
         int transformations = 0;
-        for(int i = 0; i < word1.length(); i++){
-            if( word1.charAt(i) != word2.charAt(i) )
+        for (int i = 0; i < source.length(); i++)
+            if (source.charAt(i) != destination.charAt(i))
                 transformations++;
-        }
-        
-        return (transformations == 1);
+
+        return transformations == 1;
     }
 }
