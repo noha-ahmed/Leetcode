@@ -11,10 +11,9 @@ class Solution {
         
         for(int num : nums){
             if( num <= target ){
-                int temp = target - num;
-                if( mem[temp] == - 1 )
-                    mem[temp] = countCombRec(nums, mem, temp);                
-                count += mem[temp];
+                if( mem[target - num] == - 1 )
+                    mem[target - num] = countCombRec(nums, mem, target - num);                
+                count += mem[target - num];
             }
         }
         
