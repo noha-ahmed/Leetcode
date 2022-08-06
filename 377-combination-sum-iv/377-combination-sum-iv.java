@@ -7,16 +7,15 @@ class Solution {
     }
     
     private int countCombRec(int[] nums, int[] mem, int target){
-        int count = 0;
-        
+        mem[target] = 0;
         for(int num : nums){
             if( num <= target ){
                 if( mem[target - num] == - 1 )
                     mem[target - num] = countCombRec(nums, mem, target - num);                
-                count += mem[target - num];
+                mem[target] += mem[target - num];
             }
         }
         
-        return count;
+        return mem[target];
     }
 }
