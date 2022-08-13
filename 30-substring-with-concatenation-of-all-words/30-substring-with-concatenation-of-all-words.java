@@ -1,38 +1,74 @@
 class Solution {
-    public List<Integer> findSubstring(String s, String[] words) {
-        HashMap<String, Integer> wordsMap = new HashMap<>();
+    private HashMap<String, Integer> wordCount = new HashMap<String, Integer>();
+    private int n;
+    private int wordLength;
+    private int substringSize;
+    private int k;
+    
+    private void slidingWindow(int left, String s, List<Integer> answer) {
+        HashMap<String, Integer> wordsFound = new HashMap<>();
+        int wordsUsed = 0;
+        boolean excessWord = false;
         
-        for(String word : words)
-            wordsMap.put(word, wordsMap.getOrDefault(word, 0) + 1);
-        
-        List<Integer> sol = new LinkedList<>();
-        HashMap<String, Integer> wordsFound = new HashMap<>(); 
-        
-        int wordSize = words[0].length(), wordsNum = words.length,
-        foundWordsNum = 0, startIndx = 0;
-        
-        for(int i = 0; i < s.length() - wordSize + 1;){
-            String word = s.substring(i, i + wordSize);
-            int wordOccurence = wordsMap.getOrDefault(word, 0);
-            int wordLeft = wordOccurence - wordsFound.getOrDefault(word, 0);
+        // Do the same iteration pattern as the previous approach - iterate
+        // word_length at a time, and at each iteration we focus on one word
+        for (int right = left; right <= n - wordLength; right += wordLength) {
             
-            if( wordLeft == 0 ){   
-                wordsFound.clear(); foundWordsNum = 0;
-                startIndx+=1 ; i = startIndx;
-            }
-            else{
-                foundWordsNum++;
-                wordsFound.put(word, wordsFound.getOrDefault(word, 0) + 1);
-                i+= wordSize;
+            String sub = s.substring(right, right + wordLength);
+            if (!wordCount.containsKey(sub)) {
+                // Mismatched word - reset the window
+                wordsFound.clear();
+                wordsUsed = 0;
+                excessWord = false;
+                left = right + wordLength;
+            } else {
+                // If we reached max window size or have an excess word
+                while (right - left == substringSize || excessWord) {
+                    String leftmostWord = s.substring(left, left + wordLength);
+                    left += wordLength;
+                    wordsFound.put(leftmostWord, wordsFound.get(leftmostWord) - 1);
+
+                    if (wordsFound.get(leftmostWord) >= wordCount.get(leftmostWord)) {
+                        // This word was an excess word
+                        excessWord = false;
+                    } else {
+                        // Otherwise we actually needed it
+                        wordsUsed--;
+                    }
+                }
                 
-               if( foundWordsNum == wordsNum){
-                   sol.add(startIndx);
-                   wordsFound.clear();  foundWordsNum = 0;
-                   startIndx+=1; i = startIndx;
-               }
+                // Keep track of how many times this word occurs in the window
+                wordsFound.put(sub, wordsFound.getOrDefault(sub, 0) + 1);
+                if (wordsFound.get(sub) <= wordCount.get(sub)) {
+                    wordsUsed++;
+                } else {
+                    // Found too many instances already
+                    excessWord = true;
+                }
+                
+                if (wordsUsed == k && !excessWord) {
+                    // Found a valid substring
+                    answer.add(left);
+                }
             }
         }
+    }
+    
+    public List<Integer> findSubstring(String s, String[] words) {
+        n = s.length();
+        k = words.length;
+        wordLength = words[0].length();
+        substringSize = wordLength * k;
         
-        return sol;
+        for (String word : words) {
+            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+        }
+        
+        List<Integer> answer = new ArrayList<>();
+        for (int i = 0; i < wordLength; i++) {
+            slidingWindow(i, s, answer);
+        }
+        
+        return answer;
     }
 }
