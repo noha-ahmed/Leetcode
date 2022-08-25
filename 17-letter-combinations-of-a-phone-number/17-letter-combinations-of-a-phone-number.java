@@ -4,7 +4,7 @@ class Solution {
         int n = digits.length();
         HashMap<Character, char[]> dic = constructDic();
         
-        List<String> sol = new ArrayList<String>((int)Math.pow(3, n));
+        List<String> sol = new ArrayList<String>((int)Math.pow(4, n));
         explore(0, new StringBuilder(n), digits, sol, dic);
         return sol;                              
     }
