@@ -16,26 +16,24 @@
 class Solution {
     public List<List<Integer>> pathSum(TreeNode root, int targetSum) {
         List<List<Integer>> paths = new LinkedList<>();
-        pathSumRec(root, targetSum, 0, new LinkedList<>(), paths);
+        pathSumRec(root, targetSum, new LinkedList<>(), paths);
         return paths;
     }
     
-    private void pathSumRec(TreeNode root, int targetSum, int currentSum, List<Integer> currentPath, List<List<Integer>> paths){
+    private void pathSumRec(TreeNode root, int targetSum, List<Integer> currentPath, List<List<Integer>> paths){
         
         if(root == null) return;
         
-        currentSum += root.val;
         currentPath.add(root.val);
         
-        if(currentSum == targetSum && root.left == null && root.right == null){
+        if(root.val == targetSum && root.left == null && root.right == null){
             paths.add(new LinkedList<>(currentPath));
         }
         else{
-           pathSumRec(root.left, targetSum, currentSum, currentPath, paths);
-           pathSumRec(root.right, targetSum, currentSum, currentPath, paths); 
+           pathSumRec(root.left, targetSum - root.val, currentPath, paths);
+           pathSumRec(root.right, targetSum - root.val, currentPath, paths); 
         }
         
-        currentSum -= root.val;
         currentPath.remove(currentPath.size() - 1);
     }
 
