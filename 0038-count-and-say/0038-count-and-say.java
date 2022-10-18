@@ -7,7 +7,7 @@ class Solution {
     }
     
     private String say(String digitString){
-        StringBuilder strBuilder = new StringBuilder();
+        StringBuilder strBuilder = new StringBuilder(2*digitString.length());
         char currentDigit = digitString.charAt(0);
         int count = 0;
         for(char d : digitString.toCharArray()){
