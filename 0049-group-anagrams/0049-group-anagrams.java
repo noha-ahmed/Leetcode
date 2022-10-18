@@ -2,21 +2,21 @@ class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         HashMap<String, List<String>> anagrams = new HashMap<>();
         for(String str: strs){
-            String sortedStr = sort(str);
-            List<String> words = anagrams.getOrDefault(sortedStr, new LinkedList<>());
+            String hash = hash(str);
+            List<String> words = anagrams.getOrDefault(hash, new LinkedList<>());
             words.add(str);
-            anagrams.put(sortedStr, words);
+            anagrams.put(hash, words);
         }
         
         List<List<String>> sol = new LinkedList<>();
-        for(List<String> anagramGroup : anagrams.values())
-            sol.add(anagramGroup);
+        sol.addAll(anagrams.values());
         return sol;
     }
     
-    private String sort(String str){
-        char[] content = str.toCharArray();
-        Arrays.sort(content);
-        return new String(content);
+    private String hash(String str){
+        char[] freq = new char[26];
+        for(int c : str.toCharArray())
+            freq[c - 'a']++;
+        return new String(freq);
     }
 }
