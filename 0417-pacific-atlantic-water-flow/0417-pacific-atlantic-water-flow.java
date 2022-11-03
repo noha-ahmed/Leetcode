@@ -6,15 +6,15 @@ class Solution {
         boolean[][] pacficCheck = new boolean[n][m];
         boolean[][] atlanticCheck = new boolean[n][m];
         
-        for(int i = 0; i < n; i++){
-            pacficCheck[i][0] = true;
-            atlanticCheck[i][m - 1] = true;
-        }
+//         for(int i = 0; i < n; i++){
+//             pacficCheck[i][0] = true;
+//             atlanticCheck[i][m - 1] = true;
+//         }
             
-        for(int i = 0; i < m; i++){
-            pacficCheck[0][i] = true;
-            atlanticCheck[n - 1][i] = true;
-        }
+//         for(int i = 0; i < m; i++){
+//             pacficCheck[0][i] = true;
+//             atlanticCheck[n - 1][i] = true;
+//         }
         
         for(int i = 0; i < n; i++){
             check(heights, pacficCheck, i, 0);
