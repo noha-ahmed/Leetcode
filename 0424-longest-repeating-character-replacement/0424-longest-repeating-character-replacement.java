@@ -24,7 +24,6 @@ class Solution {
             else{
                 l++;
                 freq[s.charAt(l - 1) - 'A']--;
-                maxMatching = getMax(freq);
                 windowLength--;
             }
                 
